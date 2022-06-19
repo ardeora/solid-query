@@ -1,0 +1,36 @@
+{
+  "name": "@ardeora/solid-query",
+  "version": "1.0.0",
+  "description": "Tanstack Query Adapter For Solid JS",
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ardeora/solid-query.git"
+  },
+  "keywords": [
+    "TanStack",
+    "query",
+    "solid-js"
+  ],
+  "author": "Aryan Deora",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ardeora/solid-query/issues"
+  },
+  "homepage": "https://github.com/ardeora/solid-query#readme",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.9",
+    "vite-plugin-solid": "^2.2.6"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.4.2"
+  }
+}
