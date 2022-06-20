@@ -1,4 +1,4 @@
-import { QueryObserver } from 'react-query/lib/core/'
+import { QueryObserver } from 'react-query/core'
 import type { QueryFunction, QueryKey, QueryObserverResult } from 'react-query/lib/core/types'
 import { normalizeOptions, parseQueryArgs } from './utils'
 // import { UseQueryOptions, UseQueryResult } from './types'
@@ -10,7 +10,7 @@ import { onMount, onCleanup, createComputed } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
 // HOOK
 
-export function useQuery<
+export function createQuery<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
@@ -18,7 +18,7 @@ export function useQuery<
 >(
   options: CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>
 ): CreateQueryResult<TData, TError>
-export function useQuery<
+export function createQuery<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
@@ -30,7 +30,7 @@ export function useQuery<
     'queryKey'
   >
 ): CreateQueryResult<TData, TError>
-export function useQuery<
+export function createQuery<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
@@ -43,7 +43,7 @@ export function useQuery<
     'queryKey' | 'queryFn'
   >
 ): CreateQueryResult<TData, TError>
-export function useQuery<
+export function createQuery<
   TQueryFnData,
   TError,
   TData = TQueryFnData,
@@ -59,8 +59,9 @@ export function useQuery<
   const normalizedOptions = normalizeOptions(parsedOptions)
   const queryClient = useQueryClient();
 
-  const defaultedOptions = queryClient!.defaultQueryOptions(normalizedOptions)
-  const observer = new QueryObserver(queryClient!, defaultedOptions);
+  const defaultedOptions = queryClient.defaultQueryOptions(normalizedOptions)
+  defaultedOptions._optimisticResults = 'optimistic';
+  const observer = new QueryObserver(queryClient, defaultedOptions);
 
   const [state, setState] = createStore<QueryObserverResult<TData, TError>>(
     // @ts-ignore
@@ -86,7 +87,8 @@ export function useQuery<
   createComputed(() => {
     const parsedOptions = parseQueryArgs(arg1, arg2, arg3)
     const normalizedOptions = normalizeOptions(parsedOptions)
-    observer.setOptions(normalizedOptions)
+    const defaultedOptions = queryClient.defaultQueryOptions(normalizedOptions)
+    observer.setOptions(defaultedOptions)
   })
 
   return state;

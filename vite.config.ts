@@ -16,7 +16,7 @@ export default defineConfig({
       fileName: (format) => `solid-query.${format}.js`,
     },
     rollupOptions: {
-      external: [...Object.keys(pkg.devDependencies), ...Object.keys(pkg.peerDependencies)],
+      external: [...Object.keys(pkg.devDependencies), ...Object.keys(pkg.peerDependencies), 'react'],
     }
   }
 })

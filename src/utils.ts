@@ -74,12 +74,12 @@ export function normalizeOptions<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryKey extends QueryKey = any[]
 >(
   options: CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>
   ): QueryOptions<TQueryFnData, TError, TData, TQueryKey>  {
 
-    let queryKeyArray: any[] = []
+    let queryKeyArray = []
     
     if (Array.isArray(options.queryKey)) {
       const clonedArray = deepCloneArray(options.queryKey)
