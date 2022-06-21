@@ -1,14 +1,12 @@
 import { QueryObserver } from 'react-query/core'
 import type { QueryFunction, QueryKey, QueryObserverResult } from 'react-query/lib/core/types'
-import { normalizeOptions, parseQueryArgs } from './utils'
-// import { UseQueryOptions, UseQueryResult } from './types'
-// import { useBaseQuery } from './useBaseQuery'
+
 
 import {  CreateQueryOptions, CreateQueryResult, SolidQueryKey } from './types'
-import { useQueryClient } from "./QueryClientProvider";
-import { onMount, onCleanup, createComputed } from 'solid-js';
+import { mergeProps, createComputed } from 'solid-js'
 import { createStore, reconcile } from 'solid-js/store';
-// HOOK
+import { normalizeOptions, parseQueryArgs } from './utils'
+import { createBaseQuery } from './createBaseQuery';
 
 export function createQuery<
   TQueryFnData = unknown,
@@ -56,40 +54,16 @@ export function createQuery<
   arg3?: CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>
 ): CreateQueryResult<TData, TError> {
   const parsedOptions = parseQueryArgs(arg1, arg2, arg3)
-  const normalizedOptions = normalizeOptions(parsedOptions)
-  const queryClient = useQueryClient();
-
-  const defaultedOptions = queryClient.defaultQueryOptions(normalizedOptions)
-  defaultedOptions._optimisticResults = 'optimistic';
-  const observer = new QueryObserver(queryClient, defaultedOptions);
-
-  const [state, setState] = createStore<QueryObserverResult<TData, TError>>(
-    // @ts-ignore
-    observer.getOptimisticResult(defaultedOptions),
-  );
-
-  observer.updateResult();
-
-  const unsubscribe = observer.subscribe((result) => {
-    const reconciledResult = reconcile(result);
-    // @ts-ignore
-    setState(reconciledResult);
-  });
-
-  onCleanup(() => unsubscribe());
-
-  onMount(() => {
-    // Do not notify on updates because of changes in the options because
-    // these changes should already be reflected in the optimistic result.
-    observer.setOptions(defaultedOptions, { listeners: false });
-  });
+  const [normalizedOptions, setNormalizedOptions] = createStore(normalizeOptions(parsedOptions))
 
   createComputed(() => {
     const parsedOptions = parseQueryArgs(arg1, arg2, arg3)
     const normalizedOptions = normalizeOptions(parsedOptions)
-    const defaultedOptions = queryClient.defaultQueryOptions(normalizedOptions)
-    observer.setOptions(defaultedOptions)
+
+    setNormalizedOptions(normalizedOptions)
   })
 
-  return state;
+
+
+  return createBaseQuery(normalizedOptions, QueryObserver);
 }

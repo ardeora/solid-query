@@ -12,7 +12,7 @@ export interface ContextOptions {
 
 export type SolidQueryKey = readonly unknown[] | (() => unknown[]);
 
-export interface createBaseQueryOptions<
+export interface CreateBaseQueryOptions<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
@@ -26,7 +26,7 @@ export interface CreateQueryOptions<
   TError = unknown,
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey
-> extends Omit<createBaseQueryOptions<
+> extends Omit<CreateBaseQueryOptions<
     TQueryFnData,
     TError,
     TData,
