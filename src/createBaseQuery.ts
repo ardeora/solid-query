@@ -2,7 +2,7 @@ import { QueryObserver } from 'react-query/core'
 import type { QueryKey, QueryObserverResult } from 'react-query/lib/core/types'
 import {  CreateBaseQueryOptions } from './types'
 import { useQueryClient } from "./QueryClientProvider";
-import { onMount, onCleanup, createComputed } from 'solid-js';
+import { onMount, onCleanup, createComputed, createResource } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 export function createBaseQuery<
