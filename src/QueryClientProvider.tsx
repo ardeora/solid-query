@@ -1,4 +1,4 @@
-import type { QueryClient } from "react-query/lib/core";
+import type { QueryClient } from "@tanstack/query-core";
 import { Component, createContext, useContext, JSX, onMount, onCleanup } from "solid-js";
 
 export const QueryClientContext = createContext<QueryClient>();

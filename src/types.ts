@@ -1,6 +1,5 @@
 import type { Context, Accessor } from "solid-js";
-import type { QueryClient } from 'react-query/lib/core/queryClient'
-import { QueryFunction, QueryKey, QueryObserverOptions, QueryObserverResult } from 'react-query/lib/core/types'
+import type { QueryClient, QueryKey, QueryObserverOptions, QueryObserverResult } from '@tanstack/query-core'
 
 export interface ContextOptions {
   /**

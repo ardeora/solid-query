@@ -1,5 +1,5 @@
-import { QueryObserver } from 'react-query/core'
-import type { QueryKey, QueryObserverResult } from 'react-query/lib/core/types'
+import { QueryObserver } from '@tanstack/query-core'
+import type { QueryKey, QueryObserverResult } from '@tanstack/query-core'
 import {  CreateBaseQueryOptions } from './types'
 import { useQueryClient } from "./QueryClientProvider";
 import { onMount, onCleanup, createComputed, createResource } from 'solid-js';
