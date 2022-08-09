@@ -20,9 +20,8 @@ export const Table = () => {
 
   const query = createQuery(
     () => ['users', page()],
-    async ({ queryKey }: { queryKey: [string, number] }) => {
+    async ({ queryKey }) => {
       const [id, pageNo] = queryKey;
-
       await timeout(750);
       const results = await fetch(
         `https://62b01cd2b0a980a2ef4a699c.mockapi.io/v1/test?page=${pageNo}&limit=10`

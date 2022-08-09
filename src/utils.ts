@@ -3,26 +3,37 @@ import {  CreateQueryOptions, CreateQueryResult, SolidQueryKey } from './types'
 import { QueryFunction, QueryKey, QueryOptions, QueryObserverOptions, QueryObserverResult } from 'react-query/lib/core/types'
 
 export function isQueryKey(value: unknown): value is SolidQueryKey {
-  return (Array.isArray(value) || typeof value === 'function') 
+  return typeof value === 'function'
 }
 
 export function parseQueryArgs<
-  TOptions extends CreateQueryOptions<any, any, any, TQueryKey>,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryFnData,
+  TError,
+  TData = TQueryFnData,
+  TQueryKey extends () => readonly unknown[] = SolidQueryKey,
 >(
-  arg1: SolidQueryKey | TOptions,
-  arg2?: QueryFunction<any, TQueryKey> | TOptions,
-  arg3?: TOptions
-): TOptions {
+  arg1: TQueryKey | CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  arg2?:
+    | QueryFunction<TQueryFnData, ReturnType<TQueryKey>>
+    | CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  arg3?: CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+): CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey> {
   if(!isQueryKey(arg1)) {
-    return arg1 as TOptions
+    const { queryKey: solidKey, ...opts } = arg1 as any
+    if (solidKey) {
+      return {
+        ...opts,
+        queryKey: solidKey(),
+      } 
+    } 
+    return arg1 
   }
 
   if (typeof arg2 === 'function') {
-    return { ...arg3, queryKey: arg1, queryFn: arg2 } as TOptions
+    return { ...arg3, queryKey: arg1(), queryFn: arg2 } as any
   }
 
-  return { ...arg2, queryKey: arg1 } as TOptions
+  return { ...arg2, queryKey: arg1() } as any
 }
 
 const resolveObject = (obj: any) => {
@@ -70,26 +81,26 @@ const deepCloneArray = (arr: any[]): any[] => {
   })
 }
 
-export function normalizeOptions<
-  TQueryFnData = unknown,
-  TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends QueryKey = any[]
->(
-  options: CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>
-  ): QueryOptions<TQueryFnData, TError, TData, TQueryKey>  {
+// export function normalizeOptions<
+//   TQueryFnData = unknown,
+//   TError = unknown,
+//   TData = TQueryFnData,
+//   TQueryKey extends QueryKey = any[]
+// >(
+//   options: CreateQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+//   ): QueryOptions<TQueryFnData, TError, TData, TQueryKey>  {
 
-    let queryKeyArray = []
+//     let queryKeyArray = []
     
-    if (Array.isArray(options.queryKey)) {
-      const clonedArray = deepCloneArray(options.queryKey)
-      queryKeyArray = resolveObject(clonedArray);
-    } else if (typeof options.queryKey === 'function') {
-      queryKeyArray = options.queryKey()
-    } else {
-      throw Error('Query Key Needs To Be of Type function/array') 
-    }
+//     if (Array.isArray(options.queryKey)) {
+//       const clonedArray = deepCloneArray(options.queryKey)
+//       queryKeyArray = resolveObject(clonedArray);
+//     } else if (typeof options.queryKey === 'function') {
+//       queryKeyArray = options.queryKey()
+//     } else {
+//       throw Error('Query Key Needs To Be of Type function/array') 
+//     }
 
-    // @ts-ignore
-    return { ...options, queryKey: queryKeyArray }
-}
+//     // @ts-ignore
+//     return { ...options, queryKey: queryKeyArray }
+// }

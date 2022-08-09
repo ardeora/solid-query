@@ -9,8 +9,7 @@ export interface ContextOptions {
   context?: Context<QueryClient | undefined>
 }
 
-
-export type SolidQueryKey = readonly unknown[] | (() => unknown[]);
+export type SolidQueryKey = () => readonly unknown[];
 
 export interface CreateBaseQueryOptions<
   TQueryFnData = unknown,
@@ -25,16 +24,14 @@ export interface CreateQueryOptions<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
-> extends Omit<CreateBaseQueryOptions<
-    TQueryFnData,
-    TError,
-    TData,
-    TQueryFnData,
-    TQueryKey
-  >, 'queryKey'> {
-  queryKey?: SolidQueryKey;
-}
+  TQueryKey extends () => readonly unknown[] = SolidQueryKey
+> extends CreateBaseQueryOptions<
+  TQueryFnData,
+  TError,
+  TData,
+  TQueryFnData,
+  ReturnType<TQueryKey>
+> {}
 
 export type CreateBaseQueryResult<
   TData = unknown,
