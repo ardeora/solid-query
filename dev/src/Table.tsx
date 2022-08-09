@@ -28,6 +28,8 @@ export const Table = () => {
       ).then((d) => d.json());
       console.log(results);
       return results as TableData[];
+    }, {
+      refetchInterval: 5000
     }
   );
 

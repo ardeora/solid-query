@@ -5,6 +5,7 @@ import { useQueryClient } from "./QueryClientProvider";
 import { onMount, onCleanup, createComputed, createResource } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
+// Base Query Function that is used to create the query.
 export function createBaseQuery<
   TQueryFnData,
   TError,

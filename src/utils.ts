@@ -6,6 +6,8 @@ export function isQueryKey(value: unknown): value is SolidQueryKey {
   return typeof value === 'function'
 }
 
+// The parseQuery Args functions helps normalize the arguments into the correct form.
+// Whatever the parameters are, they are normalized into the correct form.
 export function parseQueryArgs<
   TQueryFnData,
   TError,

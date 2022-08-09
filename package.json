@@ -1,6 +1,6 @@
 {
   "name": "@adeora/solid-query",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Tanstack Query Adapter For Solid JS",
   "main": "dist/solid-query.umd.js",
   "module": "./dist/solid-query.es.js",

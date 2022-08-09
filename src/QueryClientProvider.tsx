@@ -8,6 +8,7 @@ interface Props {
   children: JSX.Element;
 }
 
+// Simple Query Client Context Provider
 export const QueryClientProvider: Component<Props> = (props) => {
   if (!props.client) {
     throw new Error("No queryClient found.");
