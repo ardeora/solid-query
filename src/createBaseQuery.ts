@@ -2,7 +2,7 @@ import { QueryObserver } from '@tanstack/query-core'
 import type { QueryKey, QueryObserverResult } from '@tanstack/query-core'
 import {  CreateBaseQueryOptions } from './types'
 import { useQueryClient } from "./QueryClientProvider";
-import { onMount, onCleanup, createComputed, createResource } from 'solid-js';
+import { onMount, onCleanup, createComputed, createResource, createEffect } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Base Query Function that is used to create the query.
@@ -34,12 +34,23 @@ export function createBaseQuery<
     observer.getOptimisticResult(defaultedOptions),
   );
 
+  const [ dataResource, { refetch } ] = createResource(() => {
+    return new Promise((resolve, reject) => {
+      if (state.isSuccess) resolve(state.data)
+      if (state.isError && !state.isFetching) { 
+        throw state.error
+      }
+    })
+  });
+
   observer.updateResult();
 
   const unsubscribe = observer.subscribe((result) => {
     const reconciledResult = result;
+    console.log('reconciledResult', reconciledResult);
     // @ts-ignore
     setState(reconciledResult);
+    refetch();
   });
 
   onCleanup(() => unsubscribe());
@@ -55,5 +66,14 @@ export function createBaseQuery<
     observer.setOptions(defaultedOptions)
   })
 
-  return state;
+  const handler = {
+    get(target: QueryObserverResult<TData, TError>, prop: (keyof QueryObserverResult<TData, TError>)): any {
+      if (prop === 'data') {
+        return dataResource();
+      }
+      return Reflect.get(target, prop);
+    }
+  }
+
+  return new Proxy(state, handler) as QueryObserverResult<TData, TError>;
 }

@@ -16,7 +16,8 @@
     "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
-    "solid-icons": "^0.4.13",
-    "solid-js": "^1.4.2"
+    "solid-icons": "^1.0.1",
+    "solid-js": "^1.4.2",
+    "tailwindcss-animation-delay": "^1.0.7"
   }
 }

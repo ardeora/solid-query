@@ -6,9 +6,13 @@ import { QueryClient, QueryClientProvider } from '../../src'
 import './index.css';
 import App from './App';
 
-const client = new QueryClient();
-
-console.log(client)
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false
+    }
+  }
+});
 
 render(() => 
  <QueryClientProvider client={client}>

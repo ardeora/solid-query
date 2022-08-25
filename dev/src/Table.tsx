@@ -28,14 +28,8 @@ export const Table = () => {
       ).then((d) => d.json());
       console.log(results);
       return results as TableData[];
-    }, {
-      refetchInterval: 5000
     }
   );
-
-  createEffect(() => {
-    console.log('Query Data', query.data, query.isLoading, query.isFetching);
-  });
 
   return (
     <div class="px-4 sm:px-6 lg:px-8 mx-auto">
