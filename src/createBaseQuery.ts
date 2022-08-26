@@ -2,7 +2,7 @@ import { QueryObserver } from '@tanstack/query-core'
 import type { QueryKey, QueryObserverResult } from '@tanstack/query-core'
 import {  CreateBaseQueryOptions } from './types'
 import { useQueryClient } from "./QueryClientProvider";
-import { onMount, onCleanup, createComputed, createResource, createEffect } from 'solid-js';
+import { onMount, onCleanup, createComputed, createResource, createEffect, batch } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Base Query Function that is used to create the query.
@@ -47,7 +47,6 @@ export function createBaseQuery<
 
   const unsubscribe = observer.subscribe((result) => {
     const reconciledResult = result;
-    console.log('reconciledResult', reconciledResult);
     // @ts-ignore
     setState(reconciledResult);
     refetch();
@@ -56,8 +55,6 @@ export function createBaseQuery<
   onCleanup(() => unsubscribe());
 
   onMount(() => {
-    // Do not notify on updates because of changes in the options because
-    // these changes should already be reflected in the optimistic result.
     observer.setOptions(defaultedOptions, { listeners: false });
   });
 

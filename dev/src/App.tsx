@@ -6,7 +6,7 @@ import YoutubeStats from "./YoutubeStats";
 import InstagramStats from "./InstagramStats";
 import ChipotleStats from "./ChipotleStats";
 
-import Wrapper from "./Wrapper";
+import Dashboard from "./Dashboard";
 
 export const Loader = () => {
   return (
@@ -17,19 +17,11 @@ export const Loader = () => {
 };
 
 const App: Component = () => {
-  const [count, setCount] = createSignal(0);
-
-  const interval = setInterval(() => {
-    setCount((c) => c + 1);
-  });
-
   return (
     <div class="h-screen flex items-center justify-center">
       <div class="bg-gray-200 shadow relative min-w-[24rem] p-4 min-h-[36rem] rounded-md">
         <h1 class="text-gray-600 mb-4 font-medium text-xl">Dashboard</h1>
-        <Show when={count() > 150}>
-          <Wrapper />
-        </Show>
+        <Dashboard />
       </div>
     </div>
   );
