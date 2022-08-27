@@ -1,5 +1,13 @@
 import type { Context, Accessor } from "solid-js";
-import type { QueryClient, QueryKey, QueryObserverOptions, QueryObserverResult } from '@tanstack/query-core'
+import type { 
+  QueryClient, 
+  QueryKey, 
+  QueryObserverOptions, 
+  QueryObserverResult, 
+  MutateFunction, 
+  MutationObserverOptions,
+  MutationObserverResult 
+} from '@tanstack/query-core'
 
 export interface ContextOptions {
   /**
@@ -41,3 +49,52 @@ export type CreateQueryResult<
   TData = unknown,
   TError = unknown
 > = CreateBaseQueryResult<TData, TError>
+
+
+
+export interface CreateMutationOptions<
+  TData = unknown,
+  TError = unknown,
+  TVariables = void,
+  TContext = unknown,
+> extends ContextOptions,
+  Omit<
+    MutationObserverOptions<TData, TError, TVariables, TContext>,
+    '_defaulted' | 'variables'
+  > {}
+
+export type CreateMutateFunction<
+  TData = unknown,
+  TError = unknown,
+  TVariables = void,
+  TContext = unknown,
+> = (
+  ...args: Parameters<MutateFunction<TData, TError, TVariables, TContext>>
+) => void
+
+  
+export type CreateMutateAsyncFunction<
+  TData = unknown,
+  TError = unknown,
+  TVariables = void,
+  TContext = unknown,
+> = MutateFunction<TData, TError, TVariables, TContext>
+
+type Override<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] }
+
+export type CreateBaseMutationResult<
+  TData = unknown,
+  TError = unknown,
+  TVariables = unknown,
+  TContext = unknown,
+> = Override<
+  MutationObserverResult<TData, TError, TVariables, TContext>,
+  { mutate: CreateMutateFunction<TData, TError, TVariables, TContext> }
+> & { mutateAsync: CreateMutateAsyncFunction<TData, TError, TVariables, TContext> }
+  
+export type CreateMutationResult<
+  TData = unknown,
+  TError = unknown,
+  TVariables = unknown,
+  TContext = unknown,
+> = CreateBaseMutationResult<TData, TError, TVariables, TContext>
