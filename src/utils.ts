@@ -1,6 +1,6 @@
 
 import {  CreateQueryOptions, SolidQueryKey } from './types'
-import { QueryFunction } from '@tanstack/query-core'
+import { QueryFunction, QueryFilters } from '@tanstack/query-core'
 
 export function isQueryKey(value: unknown): value is SolidQueryKey {
   return typeof value === 'function'
@@ -36,4 +36,23 @@ export function parseQueryArgs<
   }
 
   return { ...arg2, queryKey: arg1() } as any
+}
+
+export interface SolidQueryFilters extends Omit<QueryFilters, 'queryKey'> {
+  queryKey?: SolidQueryKey
+}
+
+export type ParseFilterArgs<T extends SolidQueryFilters> = T['queryKey'] extends () => infer R ? T & { queryKey: R } : T 
+
+export function parseFilterArgs<
+  TFilters extends SolidQueryFilters,
+  TOptions = unknown,
+>(
+  arg1?: SolidQueryKey | TFilters,
+  arg2?: TFilters | TOptions,
+  arg3?: TOptions,
+): [ParseFilterArgs<TFilters>, TOptions | undefined] {
+  return (
+    isQueryKey(arg1) ? [{ ...arg2, queryKey: arg1() }, arg3] : [{ ...arg1, queryKey: arg1?.queryKey?.() } || {}, arg2]
+  ) as [ParseFilterArgs<TFilters>, TOptions]
 }
