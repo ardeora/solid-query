@@ -1,9 +1,14 @@
-import { QueryObserver, QueryFunction } from '@tanstack/query-core';
-import { CreateQueryOptions, CreateQueryResult, DefinedCreateQueryResult, SolidQueryKey } from './types'
+import { QueryObserver, QueryFunction } from '@tanstack/query-core'
+import {
+  CreateQueryOptions,
+  CreateQueryResult,
+  DefinedCreateQueryResult,
+  SolidQueryKey,
+} from './types'
 import { createComputed } from 'solid-js'
-import { createStore } from 'solid-js/store';
+import { createStore } from 'solid-js/store'
 import { parseQueryArgs } from './utils'
-import { createBaseQuery } from './createBaseQuery';
+import { createBaseQuery } from './createBaseQuery'
 
 // There are several ways to create a query.
 // 1. createQuery(options: CreateQueryOptions)
@@ -130,7 +135,9 @@ export function createQuery<
 ): CreateQueryResult<TData, TError> {
   // The parseQuery Args functions helps normalize the arguments into the correct form.
   // Whatever the parameters are, they are normalized into the correct form.
-  const [parsedOptions, setParsedOptions] = createStore(parseQueryArgs(arg1, arg2, arg3))
+  const [parsedOptions, setParsedOptions] = createStore(
+    parseQueryArgs(arg1, arg2, arg3),
+  )
 
   // Watch for changes in the options and update the parsed options.
   createComputed(() => {
@@ -138,5 +145,5 @@ export function createQuery<
     setParsedOptions(newParsedOptions)
   })
 
-  return createBaseQuery(parsedOptions, QueryObserver);
+  return createBaseQuery(parsedOptions, QueryObserver)
 }

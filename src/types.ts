@@ -1,32 +1,32 @@
-import type { Context, Accessor } from "solid-js";
-import type { 
-  QueryClient, 
-  QueryKey, 
-  QueryObserverOptions, 
-  QueryObserverResult, 
-  MutateFunction, 
+import type { Context, Accessor } from 'solid-js'
+import type {
+  QueryClient,
+  QueryKey,
+  QueryObserverOptions,
+  QueryObserverResult,
+  MutateFunction,
   MutationObserverOptions,
   MutationObserverResult,
   DefinedQueryObserverResult,
-  QueryFilters
+  QueryFilters,
 } from '@tanstack/query-core'
 
 export interface ContextOptions {
   /**
-   * Use this to pass your React Query context. Otherwise, `defaultContext` will be used.
+   * Use this to pass your Solid Query context. Otherwise, `defaultContext` will be used.
    */
   context?: Context<QueryClient | undefined>
 }
 
 /* --- Create Query and Create Base Query  Types --- */
-export type SolidQueryKey = () => readonly unknown[];
+export type SolidQueryKey = () => readonly unknown[]
 
 export interface CreateBaseQueryOptions<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
   TQueryData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryKey extends QueryKey = QueryKey,
 > extends ContextOptions,
     QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey> {}
 
@@ -34,23 +34,23 @@ export interface CreateQueryOptions<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
-  TQueryKey extends () => readonly unknown[] = SolidQueryKey
+  TQueryKey extends () => readonly unknown[] = SolidQueryKey,
 > extends CreateBaseQueryOptions<
-  TQueryFnData,
-  TError,
-  TData,
-  TQueryFnData,
-  ReturnType<TQueryKey>
-> {}
+    TQueryFnData,
+    TError,
+    TData,
+    TQueryFnData,
+    ReturnType<TQueryKey>
+  > {}
 
 export type CreateBaseQueryResult<
   TData = unknown,
-  TError = unknown
+  TError = unknown,
 > = QueryObserverResult<TData, TError>
 
 export type CreateQueryResult<
   TData = unknown,
-  TError = unknown
+  TError = unknown,
 > = CreateBaseQueryResult<TData, TError>
 
 export type DefinedCreateBaseQueryResult<
@@ -63,7 +63,6 @@ export type DefinedCreateQueryResult<
   TError = unknown,
 > = DefinedCreateBaseQueryResult<TData, TError>
 
-
 /* --- Create Mutation Types --- */
 export interface CreateMutationOptions<
   TData = unknown,
@@ -71,10 +70,10 @@ export interface CreateMutationOptions<
   TVariables = void,
   TContext = unknown,
 > extends ContextOptions,
-  Omit<
-    MutationObserverOptions<TData, TError, TVariables, TContext>,
-    '_defaulted' | 'variables'
-  > {}
+    Omit<
+      MutationObserverOptions<TData, TError, TVariables, TContext>,
+      '_defaulted' | 'variables'
+    > {}
 
 export type CreateMutateFunction<
   TData = unknown,
@@ -84,7 +83,7 @@ export type CreateMutateFunction<
 > = (
   ...args: Parameters<MutateFunction<TData, TError, TVariables, TContext>>
 ) => void
-  
+
 export type CreateMutateAsyncFunction<
   TData = unknown,
   TError = unknown,
@@ -100,8 +99,10 @@ export type CreateBaseMutationResult<
 > = Override<
   MutationObserverResult<TData, TError, TVariables, TContext>,
   { mutate: CreateMutateFunction<TData, TError, TVariables, TContext> }
-> & { mutateAsync: CreateMutateAsyncFunction<TData, TError, TVariables, TContext> }
-  
+> & {
+  mutateAsync: CreateMutateAsyncFunction<TData, TError, TVariables, TContext>
+}
+
 export type CreateMutationResult<
   TData = unknown,
   TError = unknown,
@@ -111,10 +112,10 @@ export type CreateMutationResult<
 
 type Override<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] }
 
-
 /* --- Use Is Fetching Types --- */
 export interface SolidQueryFilters extends Omit<QueryFilters, 'queryKey'> {
   queryKey?: SolidQueryKey
 }
 
-export type ParseFilterArgs<T extends SolidQueryFilters> = T['queryKey'] extends () => infer R ? T & { queryKey: R } : T 
+export type ParseFilterArgs<T extends SolidQueryFilters> =
+  T['queryKey'] extends () => infer R ? T & { queryKey: R } : T
