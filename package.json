@@ -42,7 +42,7 @@
     "solid-js": "^1.4.2"
   },
   "dependencies": {
-    "@tanstack/query-core": "^4.0.10",
+    "@tanstack/query-core": "^4.3.0-beta.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vite-plugin-dts": "^1.2.0"

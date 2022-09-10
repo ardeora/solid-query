@@ -408,10 +408,10 @@
     colors "~1.2.1"
     string-argv "~0.3.1"
 
-"@tanstack/query-core@^4.0.10":
-  version "4.0.10"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.0.10.tgz#cae6f818006616dc72c95c863592f5f68b47548a"
-  integrity sha512-9LsABpZXkWZHi4P1ozRETEDXQocLAxVzQaIhganxbNuz/uA3PsCAJxJTiQrknG5htLMzOF5MqM9G10e6DCxV1A==
+"@tanstack/query-core@^4.3.0-beta.4":
+  version "4.3.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.3.0-beta.4.tgz#9618e5ccad11fbf19fb2934d6ef78f38e3ac7b9d"
+  integrity sha512-GFtngk07PTj3WX1P0sN2hnb/z+Y+CnGtwJv2gdDepZ5M87vgaTb2y9qqd6HDpMswTAmEqjBbrNp7X/LCBZkY+A==
 
 "@ts-morph/common@~0.13.0":
   version "0.13.0"

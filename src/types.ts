@@ -6,7 +6,9 @@ import type {
   QueryObserverResult, 
   MutateFunction, 
   MutationObserverOptions,
-  MutationObserverResult 
+  MutationObserverResult,
+  DefinedQueryObserverResult,
+  QueryFilters
 } from '@tanstack/query-core'
 
 export interface ContextOptions {
@@ -16,6 +18,7 @@ export interface ContextOptions {
   context?: Context<QueryClient | undefined>
 }
 
+/* --- Create Query and Create Base Query  Types --- */
 export type SolidQueryKey = () => readonly unknown[];
 
 export interface CreateBaseQueryOptions<
@@ -50,8 +53,18 @@ export type CreateQueryResult<
   TError = unknown
 > = CreateBaseQueryResult<TData, TError>
 
+export type DefinedCreateBaseQueryResult<
+  TData = unknown,
+  TError = unknown,
+> = DefinedQueryObserverResult<TData, TError>
+
+export type DefinedCreateQueryResult<
+  TData = unknown,
+  TError = unknown,
+> = DefinedCreateBaseQueryResult<TData, TError>
 
 
+/* --- Create Mutation Types --- */
 export interface CreateMutationOptions<
   TData = unknown,
   TError = unknown,
@@ -71,7 +84,6 @@ export type CreateMutateFunction<
 > = (
   ...args: Parameters<MutateFunction<TData, TError, TVariables, TContext>>
 ) => void
-
   
 export type CreateMutateAsyncFunction<
   TData = unknown,
@@ -79,8 +91,6 @@ export type CreateMutateAsyncFunction<
   TVariables = void,
   TContext = unknown,
 > = MutateFunction<TData, TError, TVariables, TContext>
-
-type Override<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] }
 
 export type CreateBaseMutationResult<
   TData = unknown,
@@ -98,3 +108,13 @@ export type CreateMutationResult<
   TVariables = unknown,
   TContext = unknown,
 > = CreateBaseMutationResult<TData, TError, TVariables, TContext>
+
+type Override<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] }
+
+
+/* --- Use Is Fetching Types --- */
+export interface SolidQueryFilters extends Omit<QueryFilters, 'queryKey'> {
+  queryKey?: SolidQueryKey
+}
+
+export type ParseFilterArgs<T extends SolidQueryFilters> = T['queryKey'] extends () => infer R ? T & { queryKey: R } : T 
