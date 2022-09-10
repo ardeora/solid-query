@@ -7,7 +7,6 @@ import {
   onCleanup,
   createComputed,
   createResource,
-  batch,
 } from 'solid-js'
 import { createStore } from 'solid-js/store'
 

@@ -1,4 +1,5 @@
 export * from './createQuery'
+export * from './createInfiniteQuery'
 export * from './QueryClientProvider'
 export * from './createMutation'
 export * from './useIsMutating'
