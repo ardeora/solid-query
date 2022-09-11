@@ -9,7 +9,6 @@ export default defineConfig({
   plugins: [solidPlugin(), dts()],
   build: {
     target: 'esnext',
-    polyfillDynamicImport: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'solid-query',
@@ -17,7 +16,7 @@ export default defineConfig({
       fileName: (format) => `solid-query.${format}.js`,
     },
     rollupOptions: {
-      external: [...Object.keys(pkg.devDependencies), ...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies)],
+      external: [...Object.keys(pkg.devDependencies), ...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies), 'solid-js/web', 'solid-js/store'],
     }
   }
 })
