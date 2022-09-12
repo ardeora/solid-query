@@ -11,7 +11,7 @@
     "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
-  "include": ["vite.config.ts", "package.json", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["package.json", "src/**/*.ts", "src/**/*.tsx"]
 }
