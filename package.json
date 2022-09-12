@@ -1,6 +1,6 @@
 {
   "name": "@adeora/solid-query",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Tanstack Query Adapter For Solid JS",
   "author": "Aryan Deora",
   "license": "MIT",
@@ -45,7 +45,7 @@
     "typescript": "^4.8.3"
   },
   "peerDependencies": {
-    "solid-js": "^1.4.2"
+    "solid-js": "^1.5.4"
   },
   "dependencies": {
     "@tanstack/query-core": "^4.3.3",

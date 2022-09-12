@@ -1,5 +1,6 @@
-import { QueryObserver, QueryFunction } from '@tanstack/query-core'
+import { QueryObserver, QueryFunction, QueryOptions } from '@tanstack/query-core'
 import {
+  CreateBaseQueryOptions,
   CreateQueryOptions,
   CreateQueryResult,
   DefinedCreateQueryResult,
@@ -145,5 +146,5 @@ export function createQuery<
     setParsedOptions(newParsedOptions)
   })
 
-  return createBaseQuery(parsedOptions, QueryObserver)
+  return createBaseQuery(parsedOptions as QueryOptions<any, any ,any, ReturnType<TQueryKey>>, QueryObserver)
 }

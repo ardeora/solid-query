@@ -7,6 +7,7 @@ import {
   onCleanup,
   createComputed,
   createResource,
+  on
 } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
@@ -38,19 +39,22 @@ export function createBaseQuery<
     observer.getOptimisticResult(defaultedOptions),
   )
 
-  const [dataResource, { refetch }] = createResource<TData | undefined>(() => {
+  const [dataResource, { refetch }] = createResource<TData | undefined>((_, info) => {
     return new Promise((resolve) => {
-      if (state.isSuccess) resolve(state.data)
-      if (state.isError && !state.isFetching) {
-        throw state.error
+      // ?? What is happening here?? I have NO IDEA WHY INFO PUTS
+      // THE DATA IN the refetching property instead of the value property
+      const { refetching } = info as { refetching: false | QueryObserverResult<TData, TError>}
+      if (refetching) {
+        if (refetching.isSuccess) resolve(refetching.data)
+        if (refetching.isError && !refetching.isFetching) {
+          throw refetching.error
+        }
       }
     })
   })
 
-  const unsubscribe = observer.subscribe((result) => {
-    const reconciledResult = result
-    setState(reconciledResult)
-    refetch()
+  const unsubscribe = observer.subscribe((result) => {  
+    refetch(result)
   })
 
   onCleanup(() => unsubscribe())
@@ -63,6 +67,13 @@ export function createBaseQuery<
     const newDefaultedOptions = queryClient.defaultQueryOptions(options)
     observer.setOptions(newDefaultedOptions)
   })
+
+  createComputed(on(() => dataResource.state, () => {
+    const trackStates = ['pending', 'ready', 'errored'];
+    if(trackStates.includes(dataResource.state)) {
+      setState(observer.getCurrentResult())
+    }
+  }))
 
   const handler = {
     get(
