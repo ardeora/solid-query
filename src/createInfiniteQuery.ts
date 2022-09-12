@@ -2,6 +2,7 @@ import {
   QueryObserver,
   InfiniteQueryObserver,
   QueryFunction,
+  QueryOptions,
 } from '@tanstack/query-core'
 import { CreateInfiniteQueryOptions, CreateInfiniteQueryResult, SolidQueryKey } from './types'
 import { createBaseQuery } from './createBaseQuery'
@@ -106,7 +107,7 @@ export function createInfiniteQuery<
   })
 
   return createBaseQuery(
-    parsedOptions,
+    parsedOptions as QueryOptions<any, any, any, ReturnType<TQueryKey>>,
     InfiniteQueryObserver as typeof QueryObserver,
   ) as CreateInfiniteQueryResult<TData, TError>
 }

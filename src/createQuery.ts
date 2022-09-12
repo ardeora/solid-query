@@ -146,5 +146,5 @@ export function createQuery<
     setParsedOptions(newParsedOptions)
   })
 
-  return createBaseQuery(parsedOptions as QueryOptions<any, any ,any, ReturnType<TQueryKey>>, QueryObserver)
+  return createBaseQuery(parsedOptions as QueryOptions<any, any, any, ReturnType<TQueryKey>>, QueryObserver)
 }
