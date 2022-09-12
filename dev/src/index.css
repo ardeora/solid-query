@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html {
-  @apply bg-gray-300
+body,
+html {
+  @apply bg-gray-300;
 }

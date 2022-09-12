@@ -1,21 +1,24 @@
 /* @refresh reload */
-import { render } from 'solid-js/web';
+import { render } from "solid-js/web";
 
-import { QueryClient, QueryClientProvider } from '../../src'
+import { QueryClient, QueryClientProvider } from "../../src";
 
-import './index.css';
-import App from './App';
+import "./index.css";
+import App from "./App";
 
 const client = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: false
-    }
-  }
+      retry: false,
+    },
+  },
 });
 
-render(() => 
- <QueryClientProvider client={client}>
-  <App />
- </QueryClientProvider>
- , document.getElementById('root') as HTMLElement);
+render(
+  () => (
+    <QueryClientProvider client={client}>
+      <App />
+    </QueryClientProvider>
+  ),
+  document.getElementById("root") as HTMLElement,
+);

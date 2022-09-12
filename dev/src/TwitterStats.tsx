@@ -11,12 +11,14 @@ const TwitterStats = () => {
     async () => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve({ data: "71,897",});
+          resolve({ data: "71,897" });
         }, 1000);
       }) as Promise<{ data: string }>;
-    }
+    },
   );
-{/* <AiOutlineTwitter class="h-14 w-14" color="#1DA1F2" /> */}
+  {
+    /* <AiOutlineTwitter class="h-14 w-14" color="#1DA1F2" /> */
+  }
   return (
     <div class="bg-gray-100 relative shadow rounded p-4 mb-4">
       <Show when={query.data}>

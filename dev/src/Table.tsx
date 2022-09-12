@@ -1,7 +1,7 @@
-import { createQuery } from '../../src';
-import { createSignal, For, createEffect } from 'solid-js';
-import { CgSpinner } from 'solid-icons/cg';
-import { IoSyncCircleOutline } from 'solid-icons/io';
+import { createQuery } from "../../src";
+import { createSignal, For, createEffect } from "solid-js";
+import { CgSpinner } from "solid-icons/cg";
+import { IoSyncCircleOutline } from "solid-icons/io";
 
 interface TableData {
   name: string;
@@ -19,16 +19,16 @@ export const Table = () => {
   const [page, setPage] = createSignal(1);
 
   const query = createQuery(
-    () => ['users', page()],
+    () => ["users", page()],
     async ({ queryKey }) => {
       const [id, pageNo] = queryKey;
       await timeout(750);
       const results = await fetch(
-        `https://62b01cd2b0a980a2ef4a699c.mockapi.io/v1/test?page=${pageNo}&limit=10`
+        `https://62b01cd2b0a980a2ef4a699c.mockapi.io/v1/test?page=${pageNo}&limit=10`,
       ).then((d) => d.json());
       console.log(results);
       return results as TableData[];
-    }
+    },
   );
 
   return (
@@ -110,15 +110,12 @@ export const Table = () => {
           {query.isLoading ? <>Initial Loading</> : null}
           {!query.isPreviousData && query.isFetching && !query.isLoading ? (
             <>
-              Background Refresh &nbsp;{' '}
-              <IoSyncCircleOutline class="animate-spin" size={20} />
+              Background Refresh &nbsp; <IoSyncCircleOutline class="animate-spin" size={20} />
             </>
           ) : null}
         </span>
         <div class="flex-1 flex text-sm items-center justify-center">
-          {query.isLoading ? (
-            <CgSpinner class="animate-spin" size={24} />
-          ) : null}
+          {query.isLoading ? <CgSpinner class="animate-spin" size={24} /> : null}
         </div>
 
         <span class="flex items-center text-gray-500">{page()} / 10</span>

@@ -1,4 +1,3 @@
-
 import { RiSystemLoader4Fill } from "solid-icons/ri";
 
 export const IndividualSpinner = () => (

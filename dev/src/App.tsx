@@ -21,22 +21,24 @@ export const Loader = () => {
 export const [count, setCount] = createSignal(0);
 
 const App: Component = () => {
-  
-
   return (
     <div class="h-screen flex items-center justify-center">
       <div class="bg-gray-200 shadow relative min-w-[24rem] p-4 min-h-[36rem] rounded-md">
         <h1 class="text-gray-600 mb-4 font-medium text-xl">Dashboard {count()}</h1>
         <Dashboard />
 
-        <button 
+        <button
           class="bg-rose-500 text-white font-medium py-2 px-4 rounded-md"
           onClick={() => setCount(count() - 1)}
-        >Back</button>
-        <button 
+        >
+          Back
+        </button>
+        <button
           class="bg-purple-500 text-white font-medium py-2 px-4 rounded-md"
           onClick={() => setCount(count() + 1)}
-        >Hello</button>
+        >
+          Hello
+        </button>
       </div>
     </div>
   );
