@@ -1,55 +1,75 @@
 {
+  "version": "0.1.1",
   "name": "@adeora/solid-query",
-  "version": "0.1.0",
   "description": "Tanstack Query Adapter For Solid JS",
-  "author": "Aryan Deora",
   "license": "MIT",
-  "source": "src/index.ts",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "solid": "./dist/source/index.jsx",
-      "import": "./dist/esm/index.js",
-      "browser": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "node": "./dist/cjs/index.js"
+  "author": "Aryan Deora",
+  "contributors": [
+    {
+      "name": "Aryan Deora",
+      "url": "https://github.com/ardeora"
+    },
+    {
+      "name": "Oscar Beaumont",
+      "url": "https://github.com/oscartbeaumont"
     }
-  },
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ardeora/solid-query.git"
   },
-  "keywords": [
-    "TanStack",
-    "query",
-    "solid-js"
-  ],
+  "homepage": "https://github.com/ardeora/solid-query#readme",
   "bugs": {
     "url": "https://github.com/ardeora/solid-query/issues"
   },
-  "homepage": "https://github.com/ardeora/solid-query#readme",
+  "private": false,
+  "sideEffects": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": {
+        "import": "./dist/esm/index.js",
+        "require": "./dist/cjs/index.js"
+      },
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
+    }
+  },
   "scripts": {
-    "dev": "rollup -c -w",
+    "dev": "vite serve dev",
+    "test": "echo \"test not setup\"",
     "build": "rollup -c",
-    "prepare": "rollup -c"
-  },
-  "devDependencies": {
-    "@types/node": "^18.7.16",
-    "rollup": "^2.79.0",
-    "rollup-preset-solid": "^1.4.0",
-    "typescript": "^4.8.3"
-  },
-  "peerDependencies": {
-    "solid-js": "^1.5.4"
+    "prepublishOnly": "pnpm build",
+    "format": "prettier -w \"src/**/*.{js,ts,json,css,tsx,jsx}\" \"dev/**/*.{js,ts,json,css,tsx,jsx}\"",
+    "update-deps": "taze -w && pnpm i",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tanstack/query-core": "^4.3.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  }
+    "@tanstack/query-core": "^4.3.4"
+  },
+  "peerDependencies": {
+    "solid-js": ">=1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "2.7.1",
+    "rollup": "^2.77.2",
+    "rollup-preset-solid": "^1.4.0",
+    "solid-js": "^1.5.4",
+    "taze": "^0.7.6",
+    "typescript": "^4.7.4",
+    "vite": "^3.0.4",
+    "vite-plugin-solid": "^2.3.0"
+  },
+  "keywords": [
+    "solid"
+  ],
+  "packageManager": "pnpm@7.5.0"
 }

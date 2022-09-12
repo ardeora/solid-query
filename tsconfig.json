@@ -3,15 +3,19 @@
     "strict": true,
     "target": "ESNext",
     "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
-    "resolveJsonModule": true
+    "skipLibCheck": true,
+    "types": [],
+    "baseUrl": "."
   },
-  "include": ["package.json", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
