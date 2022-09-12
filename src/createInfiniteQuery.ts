@@ -93,7 +93,7 @@ export function createInfiniteQuery<
   >,
 ): CreateInfiniteQueryResult<TData, TError> {
   
-    // The parseQuery Args functions helps normalize the arguments into the correct form.
+  // The parseQuery Args functions helps normalize the arguments into the correct form.
   // Whatever the parameters are, they are normalized into the correct form.
   const [parsedOptions, setParsedOptions] = createStore(
     parseQueryArgs(arg1, arg2, arg3),

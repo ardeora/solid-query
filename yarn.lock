@@ -586,6 +586,11 @@ convert-source-map@^1.7.0:
   dependencies:
     safe-buffer "~5.1.1"
 
+csstype@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.0.tgz#4ddcac3718d787cf9df0d1b7d15033925c8f29f2"
+  integrity sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==
+
 debug@^4.1.0, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
@@ -1118,6 +1123,13 @@ solid-js@^1.3.3:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.4.4.tgz#cf14c41f118d11ec2257e60a4d23d03575c7095d"
   integrity sha512-nf/cbRzMuhb5UjbRDNfSJPqHKzUxNb9YgCQwijPUbdA3koQ/hWrz/lj0ter3lvThgxinvGPtXofDGy9bsKrXqA==
+
+solid-js@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.5.4.tgz#780a1756907d3a9e90b76e6726f52b81bf16d753"
+  integrity sha512-+65anSHhH27htkhP5LuC912fviMIckgc7/yN+WWrKhS9Kp3dvtDNl5/m4GWX1lpCvcubjShqJjGt16HET5z5Ig==
+  dependencies:
+    csstype "^3.1.0"
 
 solid-refresh@^0.4.0:
   version "0.4.0"

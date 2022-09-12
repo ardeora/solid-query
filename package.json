@@ -1,6 +1,6 @@
 {
   "name": "@adeora/solid-query",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Tanstack Query Adapter For Solid JS",
   "main": "dist/solid-query.umd.js",
   "module": "./dist/solid-query.es.js",
@@ -34,12 +34,13 @@
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
+    "solid-js": "^1.5.4",
     "typescript": "^4.6.4",
     "vite": "^2.9.9",
     "vite-plugin-solid": "^2.2.6"
   },
   "peerDependencies": {
-    "solid-js": "^1.4.2"
+    "solid-js": "^1.5.4"
   },
   "dependencies": {
     "@tanstack/query-core": "^4.3.0-beta.4",

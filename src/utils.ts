@@ -13,7 +13,7 @@ export function isQueryKey(value: unknown): value is SolidQueryKey {
 // The parseQuery Args functions helps normalize the arguments into the correct form.
 // Whatever the parameters are, they are normalized into the correct form.
 export function parseQueryArgs<
-  TOptions extends QueryOptions<any, any, any, ReturnType<TQueryKey>>,
+  TOptions extends Omit<QueryOptions<any, any, any, ReturnType<TQueryKey>>, 'queryKey'> & { queryKey?: TQueryKey },
   TQueryKey extends () => readonly unknown[] = SolidQueryKey,
 >(
   arg1: TQueryKey | TOptions,
