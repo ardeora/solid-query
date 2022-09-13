@@ -4,6 +4,7 @@ import { CreateBaseQueryOptions } from "./types";
 import { useQueryClient } from "./QueryClientProvider";
 import { onMount, onCleanup, createComputed, createResource, on } from "solid-js";
 import { createStore } from "solid-js/store";
+import { shouldThrowError } from "./utils";
 
 // Base Query Function that is used to create the query.
 export function createBaseQuery<
@@ -27,21 +28,27 @@ export function createBaseQuery<
     observer.getOptimisticResult(defaultedOptions),
   );
 
+  console.log(state)
+
   const [dataResource, { refetch }] = createResource<TData | undefined>((_, info) => {
+    const { refetching } = info as { refetching: false | QueryObserverResult<TData, TError> };
+
+    if (!refetching && state.data) return state.data;
+
     return new Promise((resolve) => {
-      // ?? What is happening here?? I have NO IDEA WHY INFO PUTS
-      // THE DATA IN the refetching property instead of the value property
-      const { refetching } = info as { refetching: false | QueryObserverResult<TData, TError> };
       if (refetching) {
-        if (refetching.isSuccess) resolve(refetching.data);
-        if (refetching.isError && !refetching.isFetching) {
-          throw refetching.error;
+        if (!(refetching.isFetching && refetching.isLoading)) { 
+          resolve(refetching.data);
         }
       }
     });
   });
 
   const unsubscribe = observer.subscribe((result) => {
+    console.log("result", result);
+    if(result.isLoading && result.isFetching) {
+      setState(result);
+    }
     refetch(result);
   });
 
@@ -62,7 +69,21 @@ export function createBaseQuery<
       () => {
         const trackStates = ["pending", "ready", "errored"];
         if (trackStates.includes(dataResource.state)) {
-          setState(observer.getCurrentResult());
+          const currentState = observer.getCurrentResult();
+          setState(currentState);
+          if ( 
+            currentState.isError && 
+            !currentState.isFetching &&
+            shouldThrowError(
+              observer.options.useErrorBoundary,
+              [
+                currentState.error,
+                observer.getCurrentQuery(),
+              ]
+            ) 
+          ) {
+            throw currentState.error;
+          }
         }
       },
     ),
@@ -74,6 +95,11 @@ export function createBaseQuery<
       prop: keyof QueryObserverResult<TData, TError>,
     ): any {
       if (prop === "data") {
+        console.log(state.isLoading, state.isFetching, dataResource())
+        if (state.isLoading && state.isFetching && dataResource()) {
+          return undefined;
+        }
+
         return dataResource();
       }
       return Reflect.get(target, prop);
