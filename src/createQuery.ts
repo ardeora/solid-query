@@ -1,6 +1,5 @@
 import { QueryObserver, QueryFunction, QueryOptions } from "@tanstack/query-core";
 import {
-  CreateBaseQueryOptions,
   CreateQueryOptions,
   CreateQueryResult,
   DefinedCreateQueryResult,

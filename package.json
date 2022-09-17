@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "@adeora/solid-query",
   "description": "Tanstack Query Adapter For Solid JS",
   "license": "MIT",

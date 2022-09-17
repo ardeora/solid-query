@@ -2,8 +2,9 @@ import { QueryObserver } from "@tanstack/query-core";
 import type { QueryKey, QueryObserverResult } from "@tanstack/query-core";
 import { CreateBaseQueryOptions } from "./types";
 import { useQueryClient } from "./QueryClientProvider";
-import { onMount, onCleanup, createComputed, createResource, on } from "solid-js";
-import { createStore } from "solid-js/store";
+import { onMount, onCleanup, createComputed, createResource, on, batch } from "solid-js";
+import { createStore, unwrap } from "solid-js/store";
+import { shouldThrowError } from "./utils";
 
 // Base Query Function that is used to create the query.
 export function createBaseQuery<
@@ -27,22 +28,25 @@ export function createBaseQuery<
     observer.getOptimisticResult(defaultedOptions),
   );
 
-  const [dataResource, { refetch }] = createResource<TData | undefined>((_, info) => {
+  const [dataResource, { refetch, mutate }] = createResource<TData | undefined>(() => {
     return new Promise((resolve) => {
-      // ?? What is happening here?? I have NO IDEA WHY INFO PUTS
-      // THE DATA IN the refetching property instead of the value property
-      const { refetching } = info as { refetching: false | QueryObserverResult<TData, TError> };
-      if (refetching) {
-        if (refetching.isSuccess) resolve(refetching.data);
-        if (refetching.isError && !refetching.isFetching) {
-          throw refetching.error;
-        }
+      if (!(state.isFetching && state.isLoading)) {
+        resolve(unwrap(state.data));
       }
     });
   });
 
+  batch(() => {
+    mutate(() => unwrap(state.data));
+    refetch();
+  });
+
   const unsubscribe = observer.subscribe((result) => {
-    refetch(result);
+    batch(() => {
+      setState(unwrap(result));
+      mutate(() => unwrap(result.data));
+      refetch();
+    });
   });
 
   onCleanup(() => unsubscribe());
@@ -58,11 +62,17 @@ export function createBaseQuery<
 
   createComputed(
     on(
-      () => dataResource.state,
+      () => state.status,
       () => {
-        const trackStates = ["pending", "ready", "errored"];
-        if (trackStates.includes(dataResource.state)) {
-          setState(observer.getCurrentResult());
+        if (
+          state.isError &&
+          !state.isFetching &&
+          shouldThrowError(observer.options.useErrorBoundary, [
+            state.error,
+            observer.getCurrentQuery(),
+          ])
+        ) {
+          throw state.error;
         }
       },
     ),
