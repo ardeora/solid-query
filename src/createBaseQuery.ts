@@ -30,23 +30,23 @@ export function createBaseQuery<
 
   const [dataResource, { refetch, mutate }] = createResource<TData | undefined>(() => {
     return new Promise((resolve) => {
-        if (!(state.isFetching && state.isLoading)) { 
-          resolve(unwrap(state.data));
-        }
+      if (!(state.isFetching && state.isLoading)) {
+        resolve(unwrap(state.data));
+      }
     });
   });
 
   batch(() => {
     mutate(() => unwrap(state.data));
-    refetch();  
-  })
+    refetch();
+  });
 
   const unsubscribe = observer.subscribe((result) => {
     batch(() => {
       setState(unwrap(result));
       mutate(() => unwrap(result.data));
-      refetch();  
-    })
+      refetch();
+    });
   });
 
   onCleanup(() => unsubscribe());
@@ -60,31 +60,23 @@ export function createBaseQuery<
     observer.setOptions(newDefaultedOptions);
   });
 
-  // createComputed(
-  //   on(
-  //     () => dataResource.state,
-  //     () => {
-  //       const trackStates = ["pending", "ready", "errored"];
-  //       if (trackStates.includes(dataResource.state)) {
-  //         const currentState = observer.getCurrentResult();
-  //         setState(currentState);
-  //         if ( 
-  //           currentState.isError && 
-  //           !currentState.isFetching &&
-  //           shouldThrowError(
-  //             observer.options.useErrorBoundary,
-  //             [
-  //               currentState.error,
-  //               observer.getCurrentQuery(),
-  //             ]
-  //           ) 
-  //         ) {
-  //           throw currentState.error;
-  //         }
-  //       }
-  //     },
-  //   ),
-  // );
+  createComputed(
+    on(
+      () => state.status,
+      () => {
+        if (
+          state.isError &&
+          !state.isFetching &&
+          shouldThrowError(observer.options.useErrorBoundary, [
+            state.error,
+            observer.getCurrentQuery(),
+          ])
+        ) {
+          throw state.error;
+        }
+      },
+    ),
+  );
 
   const handler = {
     get(

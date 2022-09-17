@@ -43,7 +43,7 @@ export function parseFilterArgs<TFilters extends SolidQueryFilters, TOptions = u
   return (
     isQueryKey(arg1)
       ? [{ ...arg2, queryKey: arg1() }, arg3]
-      : [{ ...arg1, queryKey: arg1?.queryKey?.() } || {}, arg2]
+      : [{ ...arg1, queryKey: arg1?.queryKey?.() }, arg2]
   ) as [ParseFilterArgs<TFilters>, TOptions];
 }
 
@@ -52,9 +52,9 @@ export function shouldThrowError<T extends (...args: any[]) => boolean>(
   params: Parameters<T>,
 ): boolean {
   // Allow useErrorBoundary function to override throwing behavior on a per-error basis
-  if (typeof _useErrorBoundary === 'function') {
-    return _useErrorBoundary(...params)
+  if (typeof _useErrorBoundary === "function") {
+    return _useErrorBoundary(...params);
   }
 
-  return !!_useErrorBoundary
+  return !!_useErrorBoundary;
 }
