@@ -1,4 +1,9 @@
-import { QueryObserver, InfiniteQueryObserver, QueryFunction, QueryOptions } from "@tanstack/query-core";
+import {
+  QueryObserver,
+  InfiniteQueryObserver,
+  QueryFunction,
+  QueryOptions,
+} from "@tanstack/query-core";
 import { CreateInfiniteQueryOptions, CreateInfiniteQueryResult, SolidQueryKey } from "./types";
 import { createBaseQuery } from "./createBaseQuery";
 import { createComputed } from "solid-js";
