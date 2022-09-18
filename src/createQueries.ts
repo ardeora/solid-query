@@ -1,8 +1,8 @@
-import { createComputed, createMemo, createSignal, onMount } from "solid-js";
+import { batch, createComputed, createMemo, createResource, createSignal, onCleanup, onMount } from "solid-js";
 import { QueryKey, QueryFunction, notifyManager, QueriesObserver } from "@tanstack/query-core";
 import { useQueryClient } from "./QueryClientProvider";
 import { CreateQueryOptions, CreateQueryResult, SolidQueryKey } from "./types";
-import { createStore } from "solid-js/store";
+import { createStore, SetStoreFunction, unwrap } from "solid-js/store";
 
 // This defines the `UseQueryOptions` that are accepted in `QueriesOptions` & `GetOptions`.
 // - `context` is omitted as it is passed as a root-level option to `useQueries` instead.
@@ -127,6 +127,7 @@ export type QueriesResults<
   : // Fallback
     CreateQueryResult[];
 
+
 export function createQueries<T extends any[]>({
   queries,
   context,
@@ -137,14 +138,23 @@ export function createQueries<T extends any[]>({
   const queryClient = useQueryClient({ context });
 
   const defaultedQueries = queries.map((options) => {
-    const defaultedOptions = queryClient.defaultQueryOptions(options);
+    const normalizedOptions = { ...options, queryKey: options.queryKey?.() };
+    const defaultedOptions = queryClient.defaultQueryOptions(normalizedOptions);
     defaultedOptions._optimisticResults = "optimistic";
     return defaultedOptions;
   });
-
+  
   const observer = new QueriesObserver(queryClient, defaultedQueries);
 
-  const [result, setResult] = createStore(observer.getOptimisticResult(defaultedQueries));
+  const [result, setResult] = createStore(
+    observer.getOptimisticResult(defaultedQueries)
+  );
+
+  const unsubscribe = observer.subscribe((result) => {
+    setResult(unwrap(result));
+  })
+
+  onCleanup(unsubscribe);
 
   onMount(() => {
     observer.setQueries(defaultedQueries, { listeners: false });
@@ -152,7 +162,8 @@ export function createQueries<T extends any[]>({
 
   createComputed(() => {
     const defaultedQueries = queries.map((options) => {
-      const defaultedOptions = queryClient.defaultQueryOptions(options);
+      const normalizedOptions = { ...options, queryKey: options.queryKey?.() };
+      const defaultedOptions = queryClient.defaultQueryOptions(normalizedOptions);
       defaultedOptions._optimisticResults = "optimistic";
       return defaultedOptions;
     });
