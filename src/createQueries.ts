@@ -1,4 +1,12 @@
-import { batch, createComputed, createMemo, createResource, createSignal, onCleanup, onMount } from "solid-js";
+import {
+  batch,
+  createComputed,
+  createMemo,
+  createResource,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js";
 import { QueryKey, QueryFunction, notifyManager, QueriesObserver } from "@tanstack/query-core";
 import { useQueryClient } from "./QueryClientProvider";
 import { CreateQueryOptions, CreateQueryResult, SolidQueryKey } from "./types";
@@ -127,7 +135,6 @@ export type QueriesResults<
   : // Fallback
     CreateQueryResult[];
 
-
 export function createQueries<T extends any[]>({
   queries,
   context,
@@ -143,16 +150,14 @@ export function createQueries<T extends any[]>({
     defaultedOptions._optimisticResults = "optimistic";
     return defaultedOptions;
   });
-  
+
   const observer = new QueriesObserver(queryClient, defaultedQueries);
 
-  const [result, setResult] = createStore(
-    observer.getOptimisticResult(defaultedQueries)
-  );
+  const [result, setResult] = createStore(observer.getOptimisticResult(defaultedQueries));
 
   const unsubscribe = observer.subscribe((result) => {
     setResult(unwrap(result));
-  })
+  });
 
   onCleanup(unsubscribe);
 
